@@ -32,6 +32,16 @@ function rotate(point, deg, center) {
     return [xp, yp];
 }
 
+function round(number, decimalPlaces) {
+    if (!decimalPlaces) {
+        return Math.round(number);
+    }
+    
+    let powerOfTen = Math.pow(10, decimalPlaces);
+    number = Math.round(number * powerOfTen) / powerOfTen;
+    return number;
+}
+
 // used for getting items from 2D point-array
 const X  = 0;
 const Y  = 1;

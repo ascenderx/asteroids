@@ -4,10 +4,6 @@ function Game(cvs, ctx, fps) {
     this.FPS = fps;
     this.MAX_BULLET_LIFE = 100;
     
-    let x = this.cvs.width  / 2;
-    let y = this.cvs.height / 2;
-    this.player = new Player([x, y], this.cvs, this.ctx);
-    
     padding = 10;
     this.edges = {
         top:    0 - padding,
@@ -15,7 +11,15 @@ function Game(cvs, ctx, fps) {
         right:  this.cvs.width  + padding,
         bottom: this.cvs.height + padding,
     };
+    
+    let x = (this.edges.right  - this.edges.left) / 2;
+    let y = (this.edges.bottom - this.edges.top)  / 2;
+    this.player = new Player([x, y], this.cvs, this.ctx);
+    this.score  = 0;
+    
     this.maxSpeed = 10;
+    
+    this.callbacks = [];
 }
 
 Game.prototype.keys = {};
@@ -136,6 +140,10 @@ Game.prototype.cleanUp = function() {
     }
 };
 
+Game.prototype.addCallback = function(cb) {
+    this.callbacks.push(cb);
+};
+
 Game.prototype.run = function() {
     let game = this;
     setInterval(function() {
@@ -145,5 +153,10 @@ Game.prototype.run = function() {
         game.detectCollisions();
         game.update();
         game.cleanUp();
+        
+        // fire callbacks
+        for (let c = 0; c < game.callbacks.length; c++) {
+            game.callbacks[c](game);
+        }
     }, 1000/game.FPS);
 };

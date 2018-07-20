@@ -1,25 +1,93 @@
 <!DOCTYPE html>
 <html lang="en-US">
-   <head>
-      <title>DrawJS</title>
-      <meta charset="UTF-8" />
-      <style>
-          body {
-              background-color: #111;
-              color: #fff;
-          }
-      </style>
-   </head>
-   <body>
-      <canvas id="cvs" width="500" height="500">
-         Your browser does not support the <code>&lt;canvas&gt;</code> element.
-      </canvas>
-
-      <script src="util.js"></script>
-      <script src="draw.js"></script>
-      <script src="bullet.js"></script>
-      <script src="player.js"></script>
-      <script src="game.js"></script>
-      <script src="main.js"></script>
-   </body>
+    <head>
+        <title>DrawJS</title>
+        <meta charset="UTF-8" />
+        <style>
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Monaco', 'Fira Mono', monospace;
+        }
+        
+        .data {
+            color: #0f0;
+        }
+        </style>
+    </head>
+    <body>
+        <table>
+            <tr>
+            <td>
+                <canvas id="cvs" width="500" height="500">
+                    Your browser does not support the <code>&lt;canvas&gt;</code> element.
+                </canvas>
+            </td>
+            <td valign="top">
+            <table>
+                <tr>
+                <td><h2>Keystrokes</h2></td>
+                </tr>
+                <tr>
+                <td>&#x25C4; Left</td><td>Rotate counter-clockwise</td>
+                </tr>
+                <tr>
+                <td>&#x25BA; Right</td><td>Rotate clockwise</td>
+                </tr>
+                <tr>
+                <td>&#x25B2; Up</td><td>Thrust forward</td>
+                </tr>
+                <tr>
+                <td>&#x25BC; Down</td><td>Throttle / stop</td>
+                </tr>
+                <tr>
+                <td>Space</td><td>Fire bullet</td>
+                </tr>
+                
+                <tr>
+                <td><h2>Game Data</h2></td>
+                </tr>
+                <tr>
+                <td>Score</td><td><label class="data" id="lblScore"></label></td>
+                </tr>
+                <tr>
+                <td>Position X</td><td><label class="data" id="lblPositionX"></label></td>
+                </tr>
+                <tr>
+                <td>Position Y</td><td><label class="data" id="lblPositionY"></label></td>
+                </tr>
+                <tr>
+                <td>Position NX</td><td><label class="data" id="lblPositionNX"></label></td>
+                </tr>
+                <tr>
+                <td>Position NY</td><td><label class="data" id="lblPositionNY"></label></td>
+                </tr>
+                <tr>
+                <td>Speed DR</td><td><label class="data" id="lblSpeedDR"></label></td>
+                </tr>
+                <tr>
+                <td>Speed DX</td><td><label class="data" id="lblSpeedDX"></label></td>
+                </tr>
+                <tr>
+                <td>Speed DY</td><td><label class="data" id="lblSpeedDY"></label></td>
+                </tr>
+                <tr>
+                <td>Rotation</td><td><label class="data" id="lblRotation"></label></td>
+                </tr>
+                <tr>
+                <td>Direction</td><td><label class="data" id="lblDirection"></label></td>
+                </tr>
+            </table>
+            </td>
+            </tr>
+        </table>
+        
+        
+        <script src="util.js"></script>
+        <script src="draw.js"></script>
+        <script src="bullet.js"></script>
+        <script src="player.js"></script>
+        <script src="game.js"></script>
+        <script src="main.js"></script>
+    </body>
 </html>
