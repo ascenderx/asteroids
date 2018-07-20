@@ -23,8 +23,24 @@
             padding-left: 30px;
         }
         
+        .section {
+            margin-bottom: 30px;
+        }
+        
         .data {
             color: #0f0;
+        }
+        
+        .side-table td {
+            padding-right: 20px;
+        }
+        
+        .bottom-line td {
+            border-bottom: 1px solid #fff;
+        }
+        
+        .bold {
+            font-weight: bold;
         }
         </style>
     </head>
@@ -40,9 +56,10 @@
                 </canvas>
             </td>
             <td valign="top" class="side-table">
-            <table>
-                <tr>
-                <td><h3>Keystrokes</h3></td>
+            <table class="section">
+                <tr class="bottom-line">
+                <td class="bold">Keystrokes</td>
+                <td></td>
                 </tr>
                 <tr>
                 <td>A / &#x25C4; Left</td><td>Rotate counter-clockwise</td>
@@ -59,9 +76,14 @@
                 <tr>
                 <td>Space</td><td>Fire bullet</td>
                 </tr>
-                
                 <tr>
-                <td><h3>Game Data</h3></td>
+                <td>P</td><td>Pause / unpause</td>
+                </tr>
+            </table>
+            <table class="section">
+                <tr class="bottom-line">
+                <td class="bold">Game Data</td>
+                <td></td>
                 </tr>
                 <tr>
                 <td>Score</td><td><label class="data" id="lblScore"></label></td>
