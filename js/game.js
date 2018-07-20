@@ -3,6 +3,7 @@ function Game(cvs, ctx, fps) {
     this.ctx = this.cvs.getContext('2d');
     this.FPS = fps;
     this.MAX_BULLET_LIFE = 100;
+    this.paused = false;
     
     padding = 10;
     this.edges = {
@@ -37,22 +38,27 @@ Game.prototype.releaseKey = function(key) {
 };
 
 Game.prototype.detectInput = function() {
-    if (this.player) {
-        if (this.keys.ArrowLeft) {
+    if (this.player && !this.paused) {
+        if (this.keys.ArrowLeft || this.keys.KeyA) {
             this.player.rotate(+5);
-        } else if (this.keys.ArrowRight) {
+        } else if (this.keys.ArrowRight || this.keys.KeyD) {
             this.player.rotate(-5);
         }
         
-        if (this.keys.ArrowUp) {
+        if (this.keys.ArrowUp || this.keys.KeyW) {
             this.player.thrust(1, this.maxSpeed);
-        } else if (this.keys.ArrowDown) {
+        } else if (this.keys.ArrowDown || this.keys.KeyS) {
             this.player.throttle(1);
         }
         
         if (this.keys.Space) {
             this.player.fireBullet(5);
         }
+    }
+    
+    if (this.keys.KeyP) {
+        this.paused = !this.paused;
+        this.releaseKey('KeyP');
     }
 };
 
@@ -146,12 +152,14 @@ Game.prototype.addCallback = function(cb) {
 Game.prototype.run = function() {
     let game = this;
     setInterval(function() {
-        game.drawBG();
-        game.drawFG();
         game.detectInput();
-        game.detectCollisions();
-        game.update();
-        game.cleanUp();
+        if (!game.paused) {
+            game.detectCollisions();
+            game.update();
+            game.cleanUp();
+            game.drawBG();
+            game.drawFG();
+        }
         
         // fire callbacks
         for (let c = 0; c < game.callbacks.length; c++) {

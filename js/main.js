@@ -3,20 +3,23 @@ window.addEventListener('load', function() {
     let ctx = cvs.getContext('2d');
     let fps = 30;
     
-    let lblScore      = gel('lblScore');
-    let lblPositionX  = gel('lblPositionX');
-    let lblPositionY  = gel('lblPositionY');
-    let lblPositionNX = gel('lblPositionNX');
-    let lblPositionNY = gel('lblPositionNY');
-    let lblSpeedDR    = gel('lblSpeedDR');
-    let lblSpeedDX    = gel('lblSpeedDX');
-    let lblSpeedDY    = gel('lblSpeedDY');
-    let lblRotationN  = gel('lblRotationN');
-    let lblDirectionN = gel('lblDirectionN');
+    let lblScore       = gel('lblScore');
+    let lblPaused      = gel('lblPaused');
+    let lblPositionX   = gel('lblPositionX');
+    let lblPositionY   = gel('lblPositionY');
+    let lblPositionNX  = gel('lblPositionNX');
+    let lblPositionNY  = gel('lblPositionNY');
+    let lblSpeedDR     = gel('lblSpeedDR');
+    let lblSpeedDX     = gel('lblSpeedDX');
+    let lblSpeedDY     = gel('lblSpeedDY');
+    let lblRotationN   = gel('lblRotationN');
+    let lblDirectionN  = gel('lblDirectionN');
+    let lblBulletCount = gel('lblBulletCount');
     
     this.game = new Game(cvs, ctx, fps);
     this.game.addCallback(function updateHTML(game) {
-        lblScore.innerText = game.score;
+        lblScore.innerText  = game.score;
+        lblPaused.innerText = game.paused;
         
         let player = game.player;
         lblPositionX.innerText  = round(player.center[X]);
@@ -27,12 +30,14 @@ window.addEventListener('load', function() {
         lblPositionNX.innerText = round(width  / 2 - player.center[X]);
         lblPositionNY.innerText = round(height / 2 - player.center[Y]);
         lblSpeedDR.innerText    = round(player.velocity,   1);
-        lblDirectionN.innerText  = round((360 - player.direction) % 360, 1);
-        lblRotationN.innerText   = round((360 - player.rotation)  % 360,  1);
+        lblDirectionN.innerText = round((360 - player.direction) % 360, 1);
+        lblRotationN.innerText  = round((360 - player.rotation)  % 360, 1);
         
         let rad = degToRad(player.direction);
         lblSpeedDX.innerText   = round(player.velocity * Math.cos(rad), 1);
         lblSpeedDY.innerText   = round(player.velocity * Math.sin(rad), 1);
+        
+        lblBulletCount.innerText = player.bullets.length;
     });
     this.game.run();
 });

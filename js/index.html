@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html lang="en-US">
     <head>
-        <title>DrawJS</title>
+        <title>JS Asteroids</title>
         <meta charset="UTF-8" />
         <style>
         body {
             background-color: #111;
             color: #fff;
             font-family: 'Monaco', 'Fira Mono', monospace;
+        }
+        
+        .center-text {
+            width: 100%;
+            text-align: center;
+        }
+        
+        canvas {
+            border: 3px solid #777;
+        }
+        
+        .side-table {
+            padding-left: 30px;
         }
         
         .data {
@@ -18,37 +31,43 @@
     <body>
         <table>
             <tr>
+            <td><div class="center-text"><h2>JavaScript Asteroids</h2></div></td>
+            </tr>
+            <tr>
             <td>
                 <canvas id="cvs" width="500" height="500">
                     Your browser does not support the <code>&lt;canvas&gt;</code> element.
                 </canvas>
             </td>
-            <td valign="top">
+            <td valign="top" class="side-table">
             <table>
                 <tr>
-                <td><h2>Keystrokes</h2></td>
+                <td><h3>Keystrokes</h3></td>
                 </tr>
                 <tr>
-                <td>&#x25C4; Left</td><td>Rotate counter-clockwise</td>
+                <td>A / &#x25C4; Left</td><td>Rotate counter-clockwise</td>
                 </tr>
                 <tr>
-                <td>&#x25BA; Right</td><td>Rotate clockwise</td>
+                <td>D / &#x25BA; Right</td><td>Rotate clockwise</td>
                 </tr>
                 <tr>
-                <td>&#x25B2; Up</td><td>Thrust forward</td>
+                <td>W / &#x25B2; Up</td><td>Thrust forward</td>
                 </tr>
                 <tr>
-                <td>&#x25BC; Down</td><td>Throttle / stop</td>
+                <td>S / &#x25BC; Down</td><td>Throttle / stop</td>
                 </tr>
                 <tr>
                 <td>Space</td><td>Fire bullet</td>
                 </tr>
                 
                 <tr>
-                <td><h2>Game Data</h2></td>
+                <td><h3>Game Data</h3></td>
                 </tr>
                 <tr>
                 <td>Score</td><td><label class="data" id="lblScore"></label></td>
+                </tr>
+                <tr>
+                <td>Paused</td><td><label class="data" id="lblPaused"></label></td>
                 </tr>
                 <tr>
                 <td>Position X</td><td><label class="data" id="lblPositionX"></label></td>
@@ -76,6 +95,9 @@
                 </tr>
                 <tr>
                 <td>Direction N</td><td><label class="data" id="lblDirectionN"></label></td>
+                </tr>
+                <tr>
+                <td>Bullet Count</td><td><label class="data" id="lblBulletCount"></label></td>
                 </tr>
             </table>
             </td>
