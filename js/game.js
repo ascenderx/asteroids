@@ -1,7 +1,8 @@
 function Game(cvs, ctx, fps) {
     this.cvs = gel('cvs');
     this.ctx = this.cvs.getContext('2d');
-    this.fps = fps;
+    this.FPS = fps;
+    this.MAX_BULLET_LIFE = 100;
     
     let x = this.cvs.width  / 2;
     let y = this.cvs.height / 2;
@@ -33,52 +34,74 @@ Game.prototype.releaseKey = function(key) {
 };
 
 Game.prototype.detectInput = function() {
-    if (this.keys.ArrowLeft) {
-        this.player.rotate(+5);
-    } else if (this.keys.ArrowRight) {
-        this.player.rotate(-5);
-    }
-    
-    if (this.keys.ArrowUp) {
-        this.player.thrust(1, this.maxSpeed);
-    } else if (this.keys.ArrowDown) {
-        this.player.throttle(1);
-    }
-    
-    if (this.keys.Space) {
-        this.player.fireBullet(5);
+    if (this.player) {
+        if (this.keys.ArrowLeft) {
+            this.player.rotate(+5);
+        } else if (this.keys.ArrowRight) {
+            this.player.rotate(-5);
+        }
+        
+        if (this.keys.ArrowUp) {
+            this.player.thrust(1, this.maxSpeed);
+        } else if (this.keys.ArrowDown) {
+            this.player.throttle(1);
+        }
+        
+        if (this.keys.Space) {
+            this.player.fireBullet(5);
+        }
     }
 };
 
 Game.prototype.update = function() {
-    this.player.update();
+    if (this.player) {
+        this.player.update();
+    }
+    
+    for (let b = 0; b < this.player.bullets.length; b++) {
+        if (this.player.bullets[b].life <= this.MAX_BULLET_LIFE) {
+            this.player.bullets[b].update();
+        } else {
+            this.player.bullets[b].kill();
+        }
+    }
+};
+
+Game.prototype.wrap = function(entity) {
+    if (entity) {
+        if (entity.center[X] > this.edges.right) {
+            entity.center = [
+                this.edges.left,
+                this.edges.bottom - entity.center[Y],
+            ];
+        } else if (entity.center[X] < this.edges.left) {
+            entity.center = [
+                this.edges.right,
+                this.edges.bottom - entity.center[Y],
+            ];
+        }
+        
+        if (entity.center[Y] > this.edges.bottom) {
+            entity.center = [
+                this.edges.right - entity.center[X],
+                this.edges.top,
+            ];
+        } else if (entity.center[Y] < this.edges.top) {
+            entity.center = [
+                this.edges.right - entity.center[X],
+                this.edges.bottom,
+            ];
+        }
+    }
 };
 
 Game.prototype.detectCollisions = function() {
     if (this.player) {
-        if (this.player.center[X] > this.edges.right) {
-            this.player.center = [
-                this.edges.left,
-                this.edges.bottom - this.player.center[Y],
-            ];
-        } else if (this.player.center[X] < this.edges.left) {
-            this.player.center = [
-                this.edges.right,
-                this.edges.bottom - this.player.center[Y],
-            ];
-        }
-        
-        if (this.player.center[Y] > this.edges.bottom) {
-            this.player.center = [
-                this.edges.right - this.player.center[X],
-                this.edges.top,
-            ];
-        } else if (this.player.center[Y] < this.edges.top) {
-            this.player.center = [
-                this.edges.right - this.player.center[X],
-                this.edges.bottom,
-            ];
-        }
+        this.wrap(this.player);
+    }
+    
+    for (let b = 0; b < this.player.bullets.length; b++) {
+        this.wrap(this.player.bullets[b]);
     }
 };
     
@@ -88,7 +111,29 @@ Game.prototype.drawBG = function() {
 };
 
 Game.prototype.drawFG = function() {
-    this.player.draw(this.cvs, this.ctx);
+    if (this.player) {
+        this.player.draw(this.cvs, this.ctx);
+    }
+    
+    for (let b = 0; b < this.player.bullets.length; b++) {
+        this.player.bullets[b].draw(this.cvs, this.ctx);
+    }
+};
+
+Game.prototype.cleanUp = function() {
+    if (this.player) {
+        if (!this.player.isAlive()) {
+            delete this.player;
+        } else {
+            for (let b = 0; b < this.player.bullets.length; b++) {
+                if (!this.player.bullets[b].isAlive()) {
+                    delete this.player.bullets[b];
+                    this.player.bullets.splice(b, 1);
+                    b--;
+                }
+            }
+        }
+    }
 };
 
 Game.prototype.run = function() {
@@ -99,5 +144,6 @@ Game.prototype.run = function() {
         game.detectInput();
         game.detectCollisions();
         game.update();
-    }, 1000/game.fps);
+        game.cleanUp();
+    }, 1000/game.FPS);
 };
