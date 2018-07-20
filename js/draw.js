@@ -12,9 +12,8 @@ function strokePolygon(ctx, color, points, center) {
 }
 
 function drawPoint(ctx, position, color) {
-    ctx.strokeStyle = color;
-    ctx.lineWidth   = '1';
+    ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.rect(position[X], position[Y], 2, 2);
-    ctx.stroke();
+    ctx.rect(position[X], position[Y], 5, 5);
+    ctx.fill();
 }

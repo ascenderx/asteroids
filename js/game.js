@@ -13,7 +13,7 @@ function Game(cvs, ctx, fps) {
         bottom: this.cvs.height + padding,
     };
     
-    NUM_STARS  = 40;
+    NUM_STARS  = 100;
     this.stars = [];
     STAR_DIR     = randomInt(0, 359);
     STAR_SPEED   = 0.3;
@@ -71,7 +71,7 @@ Game.prototype.detectInput = function() {
         }
         
         if (this.keys.Space) {
-            this.player.fireBullet(5);
+            this.player.fireBullet(7);
         }
     }
     
