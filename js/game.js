@@ -13,6 +13,25 @@ function Game(cvs, ctx, fps) {
         bottom: this.cvs.height + padding,
     };
     
+    NUM_STARS  = 40;
+    this.stars = [];
+    STAR_DIR     = randomInt(0, 359);
+    STAR_SPEED   = 0.3;
+    this.STAR_DX = STAR_SPEED * Math.cos(degToRad(STAR_DIR));
+    this.STAR_DY = STAR_SPEED * Math.sin(degToRad(STAR_DIR));
+    
+    for (let s = 0; s < NUM_STARS; s++) {
+        let lum   = randomInt(75, 255);
+        let color = colorStringRGB(lum, lum, lum);
+        let x     = randomInt(this.edges.left, this.edges.right);
+        let y     = randomInt(this.edges.top,  this.edges.bottom);
+        
+        this.stars.push({
+            center: [x, y],
+            color:  color,
+        });
+    }
+    
     let x = (this.edges.right  - this.edges.left) / 2;
     let y = (this.edges.bottom - this.edges.top)  / 2;
     this.player = new Player([x, y], this.cvs, this.ctx);
@@ -74,6 +93,12 @@ Game.prototype.update = function() {
             this.player.bullets[b].kill();
         }
     }
+    
+    for (let s = 0; s < this.stars.length; s++) {
+        let star = this.stars[s];
+        star.center[X] += this.STAR_DX;
+        star.center[Y] += this.STAR_DY;
+    }
 };
 
 Game.prototype.wrap = function(entity) {
@@ -112,11 +137,21 @@ Game.prototype.detectCollisions = function() {
     for (let b = 0; b < this.player.bullets.length; b++) {
         this.wrap(this.player.bullets[b]);
     }
+    
+    for (let s = 0; s < this.stars.length; s++) {
+        this.wrap(this.stars[s]);
+    }
 };
     
 Game.prototype.drawBG = function() {
     this.ctx.fillStyle = '#000';
     this.ctx.fillRect(0, 0, this.cvs.width, this.cvs.height);
+    
+    for (let s = 0; s < this.stars.length; s++) {
+        let star = this.stars[s];
+        this.ctx.fillStyle = star.color;
+        this.ctx.fillRect(star.center[X], star.center[Y], 2, 2);
+    }
 };
 
 Game.prototype.drawFG = function() {

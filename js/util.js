@@ -42,6 +42,14 @@ function round(number, decimalPlaces) {
     return number;
 }
 
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function colorStringRGB(r, g, b) {
+    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+}
+
 // used for getting items from 2D point-array
 const X  = 0;
 const Y  = 1;
