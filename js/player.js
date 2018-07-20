@@ -1,11 +1,11 @@
 function Player(center, cvs, ctx) {
     this.center    = center;
-    this.cvs       = cvs;
-    this.ctx       = ctx;
     this.color     = '#f00';
     this.rotation  = 0;
     this.direction = 0;
     this.velocity  = 0;
+    this.bullets   = [];
+    this.fireSpeed = 0;
 }
 
 Player.prototype.points = [
@@ -51,20 +51,45 @@ Player.prototype.throttle = function(force) {
     }
 };
 
+Player.prototype.fireBullet = function(force) {
+    let radR = degToRad(this.rotation);
+    let radD = degToRad(this.direction);
+    let cosR = Math.cos(radR);
+    let sinR = Math.sin(radR);
+    let cosD = Math.cos(radD);
+    let sinD = Math.sin(radD);
+    
+    let newDX    = this.velocity * cosD + force * cosR;
+    let newDY    = this.velocity * sinD + force * sinR;
+    let newSpeed = Math.sqrt(newDX * newDX + newDY * newDY);
+    
+    // perform a deep copy
+    let bullet = new Bullet(this.center);
+    bullet.fire(newSpeed, this.rotation);
+    this.bullets.push(bullet);
+};
+
 Player.prototype.update = function() {
+    // update self
     let rad  = degToRad(this.direction);
     let cosA = Math.cos(rad);
     let sinA = Math.sin(rad);
     
     this.center[X] += this.velocity * cosA;
     this.center[Y] += this.velocity * sinA;
+    
+    // update bullets
+    for (let b = 0; b < this.bullets.length; b++) {
+        this.bullets[b].update();
+    }
 };
 
-Player.prototype.draw = function() {
-    if (!this.cvs) {
+Player.prototype.draw = function(cvs, ctx) {
+    // draw self
+    if (!cvs) {
         return;
-    } else if (!this.ctx) {
-        this.ctx = this.cvs.getContext('2d');
+    } else if (!ctx) {
+        ctx = cvs.getContext('2d');
     }
     
     let points = [];
@@ -72,5 +97,10 @@ Player.prototype.draw = function() {
         let point = this.points[p];
         points.push(rotate(point, this.rotation));
     }
-    strokePolygon(this.ctx, this.color, points, this.center);
+    strokePolygon(ctx, this.color, points, this.center);
+    
+    // draw bullets
+    for (let b = 0; b < this.bullets.length; b++) {
+        this.bullets[b].draw(cvs, ctx);
+    }
 };

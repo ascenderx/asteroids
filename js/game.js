@@ -32,7 +32,7 @@ Game.prototype.releaseKey = function(key) {
     }
 };
 
-Game.prototype.update = function() {
+Game.prototype.detectInput = function() {
     if (this.keys.ArrowLeft) {
         this.player.rotate(+5);
     } else if (this.keys.ArrowRight) {
@@ -45,6 +45,12 @@ Game.prototype.update = function() {
         this.player.throttle(1);
     }
     
+    if (this.keys.Space) {
+        this.player.fireBullet(5);
+    }
+};
+
+Game.prototype.update = function() {
     this.player.update();
 };
 
@@ -82,7 +88,7 @@ Game.prototype.drawBG = function() {
 };
 
 Game.prototype.drawFG = function() {
-    this.player.draw();
+    this.player.draw(this.cvs, this.ctx);
 };
 
 Game.prototype.run = function() {
@@ -90,6 +96,7 @@ Game.prototype.run = function() {
     setInterval(function() {
         game.drawBG();
         game.drawFG();
+        game.detectInput();
         game.detectCollisions();
         game.update();
     }, 1000/game.fps);
