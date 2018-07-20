@@ -117,4 +117,5 @@ Player.prototype.draw = function(cvs, ctx) {
         points.push(rotate(point, this.rotation));
     }
     strokePolygon(ctx, this.color, points, this.center);
+    fillPolygon(ctx, this.color, points, this.center);
 };
