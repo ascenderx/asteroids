@@ -16,7 +16,6 @@ function Game(cvs, ctx, fps) {
     let y = (this.edges.bottom - this.edges.top)  / 2;
     this.player = new Player([x, y], this.cvs, this.ctx);
     this.score  = 0;
-    
     this.maxSpeed = 10;
     
     this.callbacks = [];

@@ -11,8 +11,8 @@ window.addEventListener('load', function() {
     let lblSpeedDR    = gel('lblSpeedDR');
     let lblSpeedDX    = gel('lblSpeedDX');
     let lblSpeedDY    = gel('lblSpeedDY');
-    let lblRotation   = gel('lblRotation');
-    let lblDirection  = gel('lblDirection');
+    let lblRotationN  = gel('lblRotationN');
+    let lblDirectionN = gel('lblDirectionN');
     
     this.game = new Game(cvs, ctx, fps);
     this.game.addCallback(function updateHTML(game) {
@@ -27,8 +27,8 @@ window.addEventListener('load', function() {
         lblPositionNX.innerText = round(width  / 2 - player.center[X]);
         lblPositionNY.innerText = round(height / 2 - player.center[Y]);
         lblSpeedDR.innerText    = round(player.velocity,   1);
-        lblDirection.innerText  = round(-player.direction, 1);
-        lblRotation.innerText   = round(-player.rotation,  1);
+        lblDirectionN.innerText  = round((360 - player.direction) % 360, 1);
+        lblRotationN.innerText   = round((360 - player.rotation)  % 360,  1);
         
         let rad = degToRad(player.direction);
         lblSpeedDX.innerText   = round(player.velocity * Math.cos(rad), 1);

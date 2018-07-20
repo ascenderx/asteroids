@@ -30,6 +30,10 @@ Player.prototype.rotate = function(deg) {
     }
     
     this.rotation -= deg;
+    if (this.rotation < 0) {
+        this.rotation += 360;
+    }
+    this.rotation %= 360;
 };
 
 Player.prototype.thrust = function(force, maxSpeed) {
