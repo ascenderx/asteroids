@@ -16,7 +16,7 @@ function Game(cvs, ctx, fps) {
     NUM_STARS  = 100;
     this.stars = [];
     STAR_DIR     = randomInt(0, 359);
-    STAR_SPEED   = 0.3;
+    STAR_SPEED   = 1;
     this.STAR_DX = STAR_SPEED * Math.cos(degToRad(STAR_DIR));
     this.STAR_DY = STAR_SPEED * Math.sin(degToRad(STAR_DIR));
     
@@ -82,18 +82,20 @@ Game.prototype.detectInput = function() {
 };
 
 Game.prototype.update = function() {
-    if (this.player) {
-        this.player.update();
-    }
-    
-    for (let b = 0; b < this.player.bullets.length; b++) {
-        if (this.player.bullets[b].life <= this.MAX_BULLET_LIFE) {
-            this.player.bullets[b].update();
-        } else {
-            this.player.bullets[b].kill();
+    if (!this.paused) {
+        if (this.player) {
+            this.player.update();
+        }
+        
+        for (let b = 0; b < this.player.bullets.length; b++) {
+            if (this.player.bullets[b].life <= this.MAX_BULLET_LIFE) {
+                this.player.bullets[b].update();
+            } else {
+                this.player.bullets[b].kill();
+            }
         }
     }
-    
+
     for (let s = 0; s < this.stars.length; s++) {
         let star = this.stars[s];
         star.center[X] += this.STAR_DX;
@@ -130,14 +132,16 @@ Game.prototype.wrap = function(entity) {
 };
 
 Game.prototype.detectCollisions = function() {
-    if (this.player) {
-        this.wrap(this.player);
+    if (!this.paused) {
+        if (this.player) {
+            this.wrap(this.player);
+        }
+        
+        for (let b = 0; b < this.player.bullets.length; b++) {
+            this.wrap(this.player.bullets[b]);
+        }
     }
-    
-    for (let b = 0; b < this.player.bullets.length; b++) {
-        this.wrap(this.player.bullets[b]);
-    }
-    
+
     for (let s = 0; s < this.stars.length; s++) {
         this.wrap(this.stars[s]);
     }
@@ -158,22 +162,24 @@ Game.prototype.drawFG = function() {
     if (this.player) {
         this.player.draw(this.cvs, this.ctx);
     }
-    
+
     for (let b = 0; b < this.player.bullets.length; b++) {
         this.player.bullets[b].draw(this.cvs, this.ctx);
     }
 };
 
 Game.prototype.cleanUp = function() {
-    if (this.player) {
-        if (!this.player.isAlive()) {
-            delete this.player;
-        } else {
-            for (let b = 0; b < this.player.bullets.length; b++) {
-                if (!this.player.bullets[b].isAlive()) {
-                    delete this.player.bullets[b];
-                    this.player.bullets.splice(b, 1);
-                    b--;
+    if (!this.paused) {
+        if (this.player) {
+            if (!this.player.isAlive()) {
+                delete this.player;
+            } else {
+                for (let b = 0; b < this.player.bullets.length; b++) {
+                    if (!this.player.bullets[b].isAlive()) {
+                        delete this.player.bullets[b];
+                        this.player.bullets.splice(b, 1);
+                        b--;
+                    }
                 }
             }
         }
@@ -188,13 +194,11 @@ Game.prototype.run = function() {
     let game = this;
     setInterval(function() {
         game.detectInput();
-        if (!game.paused) {
-            game.detectCollisions();
-            game.update();
-            game.cleanUp();
-            game.drawBG();
-            game.drawFG();
-        }
+        game.update();
+        game.detectCollisions();
+        game.cleanUp();
+        game.drawBG();
+        game.drawFG();
         
         // fire callbacks
         for (let c = 0; c < game.callbacks.length; c++) {
