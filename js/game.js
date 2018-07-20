@@ -2,7 +2,6 @@ function Game(cvs, ctx, fps) {
     this.cvs = gel('cvs');
     this.ctx = this.cvs.getContext('2d');
     this.FPS = fps;
-    this.MAX_BULLET_LIFE = 100;
     this.paused = false;
     
     padding = 10;
@@ -34,9 +33,10 @@ function Game(cvs, ctx, fps) {
     
     let x = (this.edges.right  - this.edges.left) / 2;
     let y = (this.edges.bottom - this.edges.top)  / 2;
-    this.player = new Player([x, y], this.cvs, this.ctx);
-    this.score  = 0;
+    this.player   = new Player([x, y], this.cvs, this.ctx);
+    this.score    = 0;
     this.maxSpeed = 10;
+    this.MAX_BULLET_LIFE = 50;
     
     this.callbacks = [];
 }
@@ -88,7 +88,7 @@ Game.prototype.update = function() {
         }
         
         for (let b = 0; b < this.player.bullets.length; b++) {
-            if (this.player.bullets[b].life <= this.MAX_BULLET_LIFE) {
+            if ((this.MAX_BULLET_LIFE <= 0) || (this.player.bullets[b].life <= this.MAX_BULLET_LIFE)) {
                 this.player.bullets[b].update();
             } else {
                 this.player.bullets[b].kill();
