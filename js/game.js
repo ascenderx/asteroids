@@ -2,12 +2,17 @@
  * GAME : CONSTRUCTOR
  ****************************************************************************/
 function Game(cvs, ctx, fps) {
+    // get canvas and context
     this.cvs = gel('cvs');
     this.ctx = this.cvs.getContext('2d');
+    
+    // initialize logic variables
     this.FPS = fps;
     this.paused = false;
+    this.callbacks = [];
     
-    padding = 10;
+    // set game boundaries
+    let padding = 10;
     this.edges = {
         top:    0 - padding,
         left:   0 - padding,
@@ -15,33 +20,58 @@ function Game(cvs, ctx, fps) {
         bottom: this.cvs.height + padding,
     };
     
-    NUM_STARS  = 100;
-    this.stars = [];
-    STAR_DIR     = randomInt(0, 359);
-    STAR_SPEED   = 1;
-    this.STAR_DX = STAR_SPEED * Math.cos(degToRad(STAR_DIR));
-    this.STAR_DY = STAR_SPEED * Math.sin(degToRad(STAR_DIR));
-    
+    // create background stars
+    let NUM_STARS  = 100;
+    this.stars     = [];
+    let STAR_DIR   = randomInt(0, 359);
+    let STAR_SPEED = 1;
+    this.STAR_DX   = STAR_SPEED * Math.cos(degToRad(STAR_DIR));
+    this.STAR_DY   = STAR_SPEED * Math.sin(degToRad(STAR_DIR));
     for (let s = 0; s < NUM_STARS; s++) {
-        let lum   = randomInt(75, 255);
-        let color = colorStringRGB(lum, lum, lum);
-        let x     = randomInt(this.edges.left, this.edges.right);
-        let y     = randomInt(this.edges.top,  this.edges.bottom);
+        let x = randomInt(this.edges.left, this.edges.right);
+        let y = randomInt(this.edges.top,  this.edges.bottom);
         
         this.stars.push({
             center: [x, y],
-            color:  color,
+            color:  colorStringHSL(0, 0, randomInt(30, 100)),
         });
     }
     
+    // create background shooting stars
+    // TODO: FIX ERRANT STAR TAILS
+    // let NUM_S_STARS     = 10;
+    // let S_STAR_SPEED    = STAR_SPEED * 1.5;
+    // let sStarHues       = [200, 270, 300];
+    // let S_STAR_INIT_LUM = 50;
+    // this.shootingStars  = [];
+    // this.S_STAR_LENGTH  = 10;
+    // this.S_STAR_SPACING = 5;
+    // this.S_STAR_DX      = S_STAR_SPEED * Math.cos(degToRad(STAR_DIR));
+    // this.S_STAR_DY      = S_STAR_SPEED * Math.sin(degToRad(STAR_DIR));
+    // for (let s = 0; s < NUM_S_STARS; s++) {
+    //     let x    = randomInt(this.edges.left, this.edges.right);
+    //     let y    = randomInt(this.edges.top,  this.edges.bottom);
+    //     let tail = [];
+    //     let hue  = sStarHues[randomInt(0, sStarHues.length - 1)];
+    //     for (let t = 0; t < this.S_STAR_LENGTH; t++) {
+    //         let lum = S_STAR_INIT_LUM * (t / this.S_STAR_LENGTH);
+    //         let xt  = x + (t * this.S_STAR_DX * this.S_STAR_SPACING);
+    //         let yt  = y + (t * this.S_STAR_DY * this.S_STAR_SPACING);
+    //         tail.push({
+    //             center: [xt, yt],
+    //             color:  colorStringHSL(hue, 100, lum),
+    //         });
+    //     }
+    //     this.shootingStars.push(tail);
+    // }
+    
+    // create the player
     let x = (this.edges.right  - this.edges.left) / 2;
     let y = (this.edges.bottom - this.edges.top)  / 2;
     this.player   = new Player([x, y], this.cvs, this.ctx);
     this.score    = 0;
     this.maxSpeed = 10;
     this.MAX_BULLET_LIFE = 50;
-    
-    this.callbacks = [];
 }
 
 /****************************************************************************
@@ -101,10 +131,12 @@ Game.prototype.detectInput = function() {
  ****************************************************************************/
 Game.prototype.update = function() {
     if (!this.paused) {
+        // update the player
         if (this.player) {
             this.player.update();
         }
         
+        // update the bullets
         for (let b = 0; b < this.player.bullets.length; b++) {
             if ((this.MAX_BULLET_LIFE <= 0) || (this.player.bullets[b].life <= this.MAX_BULLET_LIFE)) {
                 this.player.bullets[b].update();
@@ -114,11 +146,23 @@ Game.prototype.update = function() {
         }
     }
 
-    for (let s = 0; s < this.stars.length; s++) {
-        let star = this.stars[s];
-        star.center[X] += this.STAR_DX;
-        star.center[Y] += this.STAR_DY;
+    // update the stars
+    for (let s = 0; s < game.stars.length; s++) {
+        let star = game.stars[s];
+        star.center[X] += game.STAR_DX;
+        star.center[Y] += game.STAR_DY;
     }
+    
+    // // update the shooting stars
+    // new Promise(function() {
+    //     for (let s = 0; s < game.shootingStars.length; s++) {
+    //         let sStar = game.shootingStars[s];
+    //         for (let t = 0; t < sStar.length; t++) {
+    //             sStar[t].center[X] += game.S_STAR_DX;
+    //             sStar[t].center[Y] += game.S_STAR_DY;
+    //         }
+    //     }
+    // });
 };
 
 /****************************************************************************
@@ -157,42 +201,65 @@ Game.prototype.wrap = function(entity) {
  ****************************************************************************/
 Game.prototype.detectCollisions = function() {
     if (!this.paused) {
+        // wrap the player
         if (this.player) {
             this.wrap(this.player);
         }
         
+        // wrap the bullets
         for (let b = 0; b < this.player.bullets.length; b++) {
             this.wrap(this.player.bullets[b]);
         }
     }
-
+    
+    // wrap the stars
     for (let s = 0; s < this.stars.length; s++) {
         this.wrap(this.stars[s]);
     }
+    
+    // // wrap the shooting stars
+    // for (let s = 0; s < this.shootingStars.length; s++) {
+    //     let sStar = this.shootingStars[s];
+    //     for (let t = 0; t < sStar.length; t++) {
+    //         this.wrap(sStar[t]);
+    //     }
+    // }
 };
 
 /****************************************************************************
  * GAME : DRAW BACKGROUND
  ****************************************************************************/
 Game.prototype.drawBG = function() {
+    // draw the black background
     this.ctx.fillStyle = '#000';
     this.ctx.fillRect(0, 0, this.cvs.width, this.cvs.height);
     
+    // draw the stars
     for (let s = 0; s < this.stars.length; s++) {
         let star = this.stars[s];
         this.ctx.fillStyle = star.color;
         this.ctx.fillRect(star.center[X], star.center[Y], 2, 2);
     }
+    
+    // // draw the shooting stars
+    // for (let s = 0; s < this.shootingStars.length; s++) {
+    //     let sStar = this.shootingStars[s];
+    //     for (let t = 0; t < this.S_STAR_LENGTH; t++) {
+    //         drawPoint(this.ctx, sStar[t].center, sStar[t].color);
+    //     }
+    // }
 };
 
 /****************************************************************************
  * GAME : DRAW FOREGROUND
  ****************************************************************************/
 Game.prototype.drawFG = function() {
+    // draw player
     if (this.player) {
         this.player.draw(this.cvs, this.ctx);
     }
-
+    
+    // draw bullets
     for (let b = 0; b < this.player.bullets.length; b++) {
         this.player.bullets[b].draw(this.cvs, this.ctx);
     }
