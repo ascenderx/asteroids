@@ -146,6 +146,7 @@ Player.prototype.draw = function(cvs, ctx) {
         let point = this.points[p];
         points.push(rotate(point, this.rotation));
     }
+    
+    fillPolygon(ctx, '#300', points, this.center);
     strokePolygon(ctx, this.color, points, this.center);
-    fillPolygon(ctx, this.color, points, this.center);
 };

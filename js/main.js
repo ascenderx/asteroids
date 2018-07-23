@@ -30,7 +30,7 @@ window.addEventListener('load', function winMain() {
         
         let width  = game.edges.right  - game.edges.left;
         let height = game.edges.bottom - game.edges.top;
-        lblPositionNX.innerText = round(width  / 2 - player.center[X]);
+        lblPositionNX.innerText = round(player.center[X] - width  / 2);
         lblPositionNY.innerText = round(height / 2 - player.center[Y]);
         lblSpeedDR.innerText    = round(player.velocity,   1);
         lblDirectionN.innerText = round((360 - player.direction) % 360, 1);
