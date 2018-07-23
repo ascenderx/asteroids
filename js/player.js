@@ -1,3 +1,6 @@
+/****************************************************************************
+ * PLAYER : CONSTRUCTOR
+ ****************************************************************************/
 function Player(center, cvs, ctx) {
     this.center       = center;
     this.color        = '#f00';
@@ -9,14 +12,23 @@ function Player(center, cvs, ctx) {
     this.life         = 0;
 }
 
+/****************************************************************************
+ * PLAYER : KILL
+ ****************************************************************************/
 Player.prototype.kill = function() {
     this.life = -1;
 };
 
+/****************************************************************************
+ * PLAYER : IS ALIVE
+ ****************************************************************************/
 Player.prototype.isAlive = function() {
     return this.life >= 0;
 };
 
+/****************************************************************************
+ * PLAYER : POINTS ARRAY
+ ****************************************************************************/
 Player.prototype.points = [
     [ 10,   0],
     [-10,  10],
@@ -24,6 +36,9 @@ Player.prototype.points = [
     [-10, -10],
 ];
 
+/****************************************************************************
+ * PLAYER : ROTATE
+ ****************************************************************************/
 Player.prototype.rotate = function(deg) {
     if (!deg) {
         return;
@@ -36,6 +51,9 @@ Player.prototype.rotate = function(deg) {
     this.rotation %= 360;
 };
 
+/****************************************************************************
+ * PLAYER : THRUST
+ ****************************************************************************/
 Player.prototype.thrust = function(force, maxSpeed) {
     let radR = degToRad(this.rotation);
     let radD = degToRad(this.direction);
@@ -57,6 +75,9 @@ Player.prototype.thrust = function(force, maxSpeed) {
     this.direction = radToDeg(newRot);
 };
 
+/****************************************************************************
+ * PLAYER : THROTTLE
+ ****************************************************************************/
 Player.prototype.throttle = function(force) {
     this.velocity -= force;
     if (this.velocity <= 0) {
@@ -64,6 +85,9 @@ Player.prototype.throttle = function(force) {
     }
 };
 
+/****************************************************************************
+ * PLAYER : FIRE BULLET
+ ****************************************************************************/
 Player.prototype.fireBullet = function(force) {
     let radR = degToRad(this.rotation);
     let radD = degToRad(this.direction);
@@ -85,6 +109,9 @@ Player.prototype.fireBullet = function(force) {
     this.bullets.push(bullet);
 };
 
+/****************************************************************************
+ * PLAYER : UPDATE
+ ****************************************************************************/
 Player.prototype.update = function() {
     if (this.life < 0) {
         return;
@@ -100,6 +127,9 @@ Player.prototype.update = function() {
     this.life++;
 };
 
+/****************************************************************************
+ * PLAYER : DRAW
+ ****************************************************************************/
 Player.prototype.draw = function(cvs, ctx) {
     if (this.life < 0) {
         return;

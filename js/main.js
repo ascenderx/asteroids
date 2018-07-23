@@ -1,4 +1,7 @@
-window.addEventListener('load', function() {
+/****************************************************************************
+ * WINDOW : ON LOAD / MAIN
+ ****************************************************************************/
+window.addEventListener('load', function winMain() {
     let cvs = gel('cvs');
     let ctx = cvs.getContext('2d');
     let fps = 30;
@@ -42,7 +45,10 @@ window.addEventListener('load', function() {
     this.game.run();
 });
 
-window.addEventListener('keydown', function(event) {
+/****************************************************************************
+ * WINDOW : ON KEY DOWN
+ ****************************************************************************/
+window.addEventListener('keydown', function winKeyDown(event) {
     if (!this.game) {
         return;
     }
@@ -50,7 +56,10 @@ window.addEventListener('keydown', function(event) {
     this.game.fireKey(event.code);
 });
 
-window.addEventListener('keyup', function(event) {
+/****************************************************************************
+ * WINDOW : ON KEY UP
+ ****************************************************************************/
+window.addEventListener('keyup', function winKeyUp(event) {
     if (!this.game) {
         return;
     }

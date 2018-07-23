@@ -1,15 +1,27 @@
+/****************************************************************************
+ * UTILITIES : GET DOCUMENT ELEMENT BY ID (ALIAS)
+ ****************************************************************************/
 function gel(id) {
     return document.getElementById(id);
 }
 
+/****************************************************************************
+ * UTILITIES : DEGREES TO RADIANS
+ ****************************************************************************/
 function degToRad(deg) {
     return deg * Math.PI / 180.0;
 }
 
+/****************************************************************************
+ * UTILITIES : RADIANS TO DEGREES
+ ****************************************************************************/
 function radToDeg(rad) {
     return rad * 180.0 / Math.PI;
 }
 
+/****************************************************************************
+ * UTILITIES : ROTATE POINT ABOUT AN ANGLE AND CENTER
+ ****************************************************************************/
 function rotate(point, deg, center) {
     if (!deg) {
         return point;
@@ -32,6 +44,9 @@ function rotate(point, deg, center) {
     return [xp, yp];
 }
 
+/****************************************************************************
+ * UTILITIES : ROUND NUMBER TO DECIMAL PLACES
+ ****************************************************************************/
 function round(number, decimalPlaces) {
     if (!decimalPlaces) {
         return Math.round(number);
@@ -42,15 +57,23 @@ function round(number, decimalPlaces) {
     return number;
 }
 
+/****************************************************************************
+ * UTILITIES : GENERATE RANDOM INTEGER BETWEEN MIN AND MAX (INCLUSIVE)
+ ****************************************************************************/
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+/****************************************************************************
+ * UTILITIES : CONVERT RGB COLOR TO HEX STRING
+ ****************************************************************************/
 function colorStringRGB(r, g, b) {
     return 'rgb(' + r + ', ' + g + ', ' + b + ')';
 }
 
-// used for getting items from 2D point-array
+/****************************************************************************
+ * UTILITIES : POINT CONSTANTS
+ ****************************************************************************/
 const X  = 0;
 const Y  = 1;
 const DX = 0;

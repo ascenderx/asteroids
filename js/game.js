@@ -1,3 +1,6 @@
+/****************************************************************************
+ * GAME : CONSTRUCTOR
+ ****************************************************************************/
 function Game(cvs, ctx, fps) {
     this.cvs = gel('cvs');
     this.ctx = this.cvs.getContext('2d');
@@ -41,8 +44,14 @@ function Game(cvs, ctx, fps) {
     this.callbacks = [];
 }
 
+/****************************************************************************
+ * GAME : KEYS MAP
+ ****************************************************************************/
 Game.prototype.keys = {};
 
+/****************************************************************************
+ * GAME: FIRE KEY
+ ****************************************************************************/
 Game.prototype.fireKey = function(key) {
     if (!this.keys[key]) {
         this.keys[key] = 0;
@@ -50,12 +59,18 @@ Game.prototype.fireKey = function(key) {
     this.keys[key]++;
 };
 
+/****************************************************************************
+ * GAME : RELEASE KEY
+ ****************************************************************************/
 Game.prototype.releaseKey = function(key) {
     if (this.keys[key]) {
         delete this.keys[key];
     }
 };
 
+/****************************************************************************
+ * GAME : DETECT INPUT
+ ****************************************************************************/
 Game.prototype.detectInput = function() {
     if (this.player && !this.paused) {
         if (this.keys.ArrowLeft || this.keys.KeyA) {
@@ -81,6 +96,9 @@ Game.prototype.detectInput = function() {
     }
 };
 
+/****************************************************************************
+ * GAME : UPDATE
+ ****************************************************************************/
 Game.prototype.update = function() {
     if (!this.paused) {
         if (this.player) {
@@ -103,6 +121,9 @@ Game.prototype.update = function() {
     }
 };
 
+/****************************************************************************
+ * GAME : WRAP OBJECTS AROUND BORDERS
+ ****************************************************************************/
 Game.prototype.wrap = function(entity) {
     if (entity) {
         if (entity.center[X] > this.edges.right) {
@@ -131,6 +152,9 @@ Game.prototype.wrap = function(entity) {
     }
 };
 
+/****************************************************************************
+ * GAME : DETECT COLLISIONS
+ ****************************************************************************/
 Game.prototype.detectCollisions = function() {
     if (!this.paused) {
         if (this.player) {
@@ -146,7 +170,10 @@ Game.prototype.detectCollisions = function() {
         this.wrap(this.stars[s]);
     }
 };
-    
+
+/****************************************************************************
+ * GAME : DRAW BACKGROUND
+ ****************************************************************************/
 Game.prototype.drawBG = function() {
     this.ctx.fillStyle = '#000';
     this.ctx.fillRect(0, 0, this.cvs.width, this.cvs.height);
@@ -158,6 +185,9 @@ Game.prototype.drawBG = function() {
     }
 };
 
+/****************************************************************************
+ * GAME : DRAW FOREGROUND
+ ****************************************************************************/
 Game.prototype.drawFG = function() {
     if (this.player) {
         this.player.draw(this.cvs, this.ctx);
@@ -168,6 +198,9 @@ Game.prototype.drawFG = function() {
     }
 };
 
+/****************************************************************************
+ * GAME : CLEAN UP OLD MEMORY
+ ****************************************************************************/
 Game.prototype.cleanUp = function() {
     if (!this.paused) {
         if (this.player) {
@@ -186,10 +219,16 @@ Game.prototype.cleanUp = function() {
     }
 };
 
+/****************************************************************************
+ * GAME : ADD CALLBACK
+ ****************************************************************************/
 Game.prototype.addCallback = function(cb) {
     this.callbacks.push(cb);
 };
 
+/****************************************************************************
+ * GAME : RUN
+ ****************************************************************************/
 Game.prototype.run = function() {
     let game = this;
     setInterval(function() {
