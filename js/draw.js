@@ -1,4 +1,11 @@
 /****************************************************************************
+ * DRAW : CONSTANTS
+ ****************************************************************************/
+const LINE_WIDTH   = 2;
+const POINT_WIDTH  = 5;
+const POINT_HEIGHT = 5
+
+/****************************************************************************
  * DRAW : ITERATE POLYGON
  ****************************************************************************/
 function __iteratePolygon__(ctx, points, center) {
@@ -14,7 +21,6 @@ function __iteratePolygon__(ctx, points, center) {
 /****************************************************************************
  * DRAW : STROKE POLYGON
  ****************************************************************************/
-const LINE_WIDTH = 2;
 function strokePolygon(ctx, color, points, center) {
     ctx.lineWidth = LINE_WIDTH;
     ctx.strokeStyle = color;
@@ -34,8 +40,6 @@ function fillPolygon(ctx, color, points, center) {
 /****************************************************************************
  * DRAW : DRAW POINT
  ****************************************************************************/
-const POINT_WIDTH  = 5;
-const POINT_HEIGHT = 5
 function drawPoint(ctx, position, color) {
     ctx.fillStyle = color;
     ctx.beginPath();

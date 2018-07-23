@@ -1,14 +1,22 @@
 /****************************************************************************
+ * PLAYER : CONTANTS
+ ****************************************************************************/
+ const PLAYER_COLOR_LINING  = '#f00';
+ const PLAYER_COLOR_FILLING = '#300';
+ const BULLET_OFFSET        = 10;
+
+/****************************************************************************
  * PLAYER : CONSTRUCTOR
  ****************************************************************************/
 function Player(center, cvs, ctx) {
     this.center       = center;
-    this.color        = '#f00';
+    this.colorLining  = PLAYER_COLOR_LINING;
+    this.colorFilling = PLAYER_COLOR_FILLING;
     this.rotation     = 0;
     this.direction    = 0;
     this.velocity     = 0;
     this.bullets      = [];
-    this.bulletOffset = 10;
+    this.bulletOffset = BULLET_OFFSET;
     this.life         = 0;
 }
 
@@ -147,6 +155,6 @@ Player.prototype.draw = function(cvs, ctx) {
         points.push(rotate(point, this.rotation));
     }
     
-    fillPolygon(ctx, '#300', points, this.center);
-    strokePolygon(ctx, this.color, points, this.center);
+    fillPolygon(ctx,   this.colorFilling, points, this.center);
+    strokePolygon(ctx, this.colorLining,  points, this.center);
 };

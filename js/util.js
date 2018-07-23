@@ -1,4 +1,13 @@
 /****************************************************************************
+ * UTILITIES : CONSTANTS
+ ****************************************************************************/
+// index constants for accessing point/velocity arrays
+const X  = 0;
+const Y  = 1;
+const DX = 0;
+const DY = 1;
+
+/****************************************************************************
  * UTILITIES : GET DOCUMENT ELEMENT BY ID (ALIAS)
  ****************************************************************************/
 function gel(id) {
@@ -77,11 +86,3 @@ function colorStringRGB(r, g, b) {
 function colorStringHSL(h, s, l) {
     return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
 }
-
-/****************************************************************************
- * UTILITIES : POINT CONSTANTS
- ****************************************************************************/
-const X  = 0;
-const Y  = 1;
-const DX = 0;
-const DY = 1;
