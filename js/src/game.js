@@ -7,6 +7,10 @@ const STAR_DIR         = randomInt(0, 359);
 const STAR_SPEED       = 1;
 const PLAYER_MAX_SPEED = 15;
 const MAX_BULLET_LIFE  = 100;
+const BULLET_FORCE     = 10;
+const THRUST_FORCE     = 1;
+const THROTTLE_FORCE   = 1;
+const ROTATE_ANGLE     = 5;
 
 /****************************************************************************
  * GAME : CONSTRUCTOR
@@ -82,19 +86,19 @@ Game.prototype.releaseKey = function(key) {
 Game.prototype.detectInput = function() {
     if (this.player && !this.paused) {
         if (this.keys.ArrowLeft || this.keys.KeyA) {
-            this.player.rotate(+5);
+            this.player.rotate(+ROTATE_ANGLE);
         } else if (this.keys.ArrowRight || this.keys.KeyD) {
-            this.player.rotate(-5);
+            this.player.rotate(-ROTATE_ANGLE);
         }
         
         if (this.keys.ArrowUp || this.keys.KeyW) {
-            this.player.thrust(1, this.maxSpeed);
+            this.player.thrust(THRUST_FORCE, this.maxSpeed);
         } else if (this.keys.ArrowDown || this.keys.KeyS) {
-            this.player.throttle(1);
+            this.player.throttle(THROTTLE_FORCE);
         }
         
         if (this.keys.Space) {
-            this.player.fireBullet(7);
+            this.player.fireBullet(BULLET_FORCE);
         }
     }
     
